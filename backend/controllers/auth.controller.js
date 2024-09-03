@@ -54,21 +54,47 @@ export const signUp = async (req, res) => {
     res.status(201).json({
       status: "Success",
       message: "User created successfully",
-      data: {
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
+    });
+  } catch (err) {
+    console.log("Error in authController:signUp", err.message);
+    res.status(500).json({ status: "failed", msg: err.message });
+  }
+};
+export const login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
+    // In the comparePassword method, 'this' will point to the user document.
+    if (user && (await user.comparePassword(password))) {
+      const { accessToken, refreshToken } = generateTokens(user._id);
+      await storeToken(user._id, refreshToken);
+      // Set Cookies
+      setCookies(res, accessToken, refreshToken);
+      res.status(200).json({
+        status: "Success",
+        message: "User logged in successfully",
         user: {
           id: user._id,
           name: user.name,
           email: user.email,
           role: user.role,
         },
-      },
-    });
+      });
+    } else {
+      res
+        .status(401)
+        .json({ status: "failed", message: "Incorrect email or password" });
+    }
   } catch (err) {
-    res.status(500).json({ status: "failed", msg: err.message });
+    console.log("Error in authController:login", err.message);
+    res.status(500).json({ status: "failed", message: err.message });
   }
-};
-export const login = async (req, res) => {
-  res.send("Login route called");
 };
 
 export const logout = async (req, res) => {
@@ -89,6 +115,7 @@ export const logout = async (req, res) => {
       res.json({ status: "Success", message: "Logged out successfully" });
     }
   } catch (err) {
+    console.log("Error in authController:logout", err.message);
     res
       .status(500)
       .json({ status: "failed", message: "Server error", error: err.message });
