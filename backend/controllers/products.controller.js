@@ -1,3 +1,4 @@
+import cloudinary from "../lib/cloudinary.js";
 import { redis } from "../lib/redis.js";
 import Product from "../models/product.model.js";
 
@@ -46,6 +47,144 @@ export const getFeaturedProducts = async (req, res) => {
       "Error in productsController:getFeaturedProducts",
       error.message
     );
+    res.status(500).json({
+      status: "failed",
+      message: "Server error",
+      error: error.message,
+    });
+  }
+};
+
+export const createProduct = async (req, res) => {
+  try {
+    const { name, description, image, price, category } = req.body;
+
+    let cloudinaryResponse = null;
+    if (image) {
+      cloudinaryResponse = await cloudinary.uploader.upload(image, {
+        folder: "products",
+      });
+    }
+
+    // clodinary puts the image in the .secureUrl key
+    const product = await Product.create({
+      name,
+      description,
+      price,
+      category,
+      image: cloudinaryResponse?.secure_url
+        ? cloudinaryResponse?.secure_url
+        : "",
+    });
+    res.status(201).json({
+      status: "Success",
+      product,
+    });
+  } catch (error) {
+    console.log("Error in productsController:createProduct", error.message);
+    res.status(500).json({
+      status: "failed",
+      message: "Server error",
+      error: error.name,
+    });
+  }
+};
+
+// Delete the product from the database and also delete the image fro the cloudinary
+export const deleteProduct = async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+    if (!product) {
+      return res.status(404).json({
+        status: "failed",
+        message: "Product not found",
+      });
+    }
+    if (product.image) {
+      // Example https://res.cloudinary.com/dzyzvgvtb/image/upload/v1725458892/name-of-image.jpg
+      const publicId = product.image.split("/").pop().split(".")[0];
+      try {
+        await cloudinary.uploader.destroy(`products/${publicId}`);
+        console.log("Image deleted from cloudinary");
+      } catch (error) {
+        console.log("Error deleting image from cloudinary:", error.message);
+      }
+    }
+
+    await Product.findByIdAndDelete(req.params.id);
+    res.status(200).json({
+      status: "Success",
+      message: "Product deleted successfully",
+    });
+  } catch (error) {
+    console.log("Error in productsController:deleteProduct", error.message);
+    res.status(500).json({
+      status: "failed",
+      message: "Server error",
+      error: error.message,
+    });
+  }
+};
+
+export const getRecommendedProducts = async (req, res) => {
+  try {
+    const recommendedProducts = await Product.aggregate([
+      {
+        $sample: { size: 3 },
+      },
+      {
+        $project: { _id: 1, name: 1, description: 1, image: 1, price: 1 },
+      },
+    ]);
+
+    res.status(200).json({
+      status: "Success",
+      products: recommendedProducts,
+    });
+  } catch (error) {
+    console.log(
+      "Error in productsController:getRecommendedProducts",
+      error.message
+    );
+    res.status(500).json({
+      status: "failed",
+      message: "Server error",
+      error: error.message,
+    });
+  }
+};
+
+export const getProductsByCategory = async (req, res) => {
+  const category = req.params.category;
+  try {
+    const products = await Product.find({ category });
+    res.status(200).json({
+      statis: "Success",
+      products,
+    });
+  } catch (error) {
+    console.log(
+      "Error in productsController:getProductsByCategory",
+      error.message
+    );
+    res.status(500).json({
+      status: "failed",
+      message: "Server error",
+      error: error.message,
+    });
+  }
+};
+
+export const toggleFeatured = async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+    if (product) {
+      product.isFeatured = !product.isFeatured;
+      const updatedProduct = await product.save();
+      // Update the redis cache
+    }
+  } catch (error) {
+    console.log("Error in productsController:toggleFeatured", error.message);
     res.status(500).json({
       status: "failed",
       message: "Server error",
