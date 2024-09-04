@@ -107,12 +107,16 @@ export const logout = async (req, res) => {
         refreshToken,
         process.env.REFRESH_TOKEN_SECRET
       );
-      console.log(decoded);
       // We use the userId from the decoded object to delete the refreshToken from Redis as we have save the refreshToken in Redis as `refresh_token:userId`
       await redis.del(`refresh_token:${decoded.userId}`);
       res.clearCookie("refreshToken");
       res.clearCookie("accessToken");
       res.json({ status: "Success", message: "Logged out successfully" });
+    } else {
+      res.status(401).json({
+        status: "failed",
+        message: "You cannot log out without logging in first",
+      });
     }
   } catch (err) {
     console.log("Error in authController:logout", err.message);

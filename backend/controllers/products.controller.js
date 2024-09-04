@@ -2,6 +2,19 @@ import cloudinary from "../lib/cloudinary.js";
 import { redis } from "../lib/redis.js";
 import Product from "../models/product.model.js";
 
+async function updateFeaturedProductsCache() {
+  try {
+    // Get all the featured products from the database
+    const featuredProducts = await Product.find({ isFeatured: true }).lean();
+    await redis.set("featuredProducts", JSON.stringify(featuredProducts));
+  } catch (error) {
+    console.log(
+      "Error in updateFeaturedProductsCache function:",
+      error.message
+    );
+  }
+}
+
 export const getAllProducts = async (req, res) => {
   try {
     const products = await Product.find({}); // get all products
@@ -182,6 +195,17 @@ export const toggleFeatured = async (req, res) => {
       product.isFeatured = !product.isFeatured;
       const updatedProduct = await product.save();
       // Update the redis cache
+      // This function is called after updating our database. So when we fetch the featured products from the database, we will get an array which will have the latest featured product also. We then set that featuredProducts array in redis.
+      await updateFeaturedProductsCache();
+      res.status(200).json({
+        status: "success",
+        updatedProduct,
+      });
+    } else {
+      res.status(404).json({
+        status: "failed",
+        message: "Product not found",
+      });
     }
   } catch (error) {
     console.log("Error in productsController:toggleFeatured", error.message);
