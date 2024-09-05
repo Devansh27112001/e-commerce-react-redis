@@ -1,5 +1,7 @@
 import jwt from "jsonwebtoken";
 import User from "../models/user.model.js";
+
+//This middleware will check whether a user has logged in or not.
 export const protectRoute = async (req, res, next) => {
   try {
     const accessToken = req.cookies.accessToken;
@@ -36,6 +38,8 @@ export const protectRoute = async (req, res, next) => {
     res.status(401).json({ status: "failed", message: "Unauthorized" });
   }
 };
+
+//This middleware will check whether a user is an admin.
 export const adminRoute = (req, res, next) => {
   if (req.user && req.user.role === "admin") {
     next();

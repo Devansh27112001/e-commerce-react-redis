@@ -86,7 +86,7 @@ export const createProduct = async (req, res) => {
       price,
       category,
       image: cloudinaryResponse?.secure_url
-        ? cloudinaryResponse?.secure_url
+        ? cloudinaryResponse.secure_url
         : "",
     });
     res.status(201).json({
@@ -117,6 +117,7 @@ export const deleteProduct = async (req, res) => {
       // Example https://res.cloudinary.com/dzyzvgvtb/image/upload/v1725458892/name-of-image.jpg
       const publicId = product.image.split("/").pop().split(".")[0];
       try {
+        // It will be in the products folder in cloudinary like 'products/name-of-image.jpg'
         await cloudinary.uploader.destroy(`products/${publicId}`);
         console.log("Image deleted from cloudinary");
       } catch (error) {
