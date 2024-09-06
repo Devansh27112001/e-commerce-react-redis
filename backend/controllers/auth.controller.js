@@ -175,5 +175,21 @@ export const refreshToken = async (req, res) => {
   }
 };
 
-// TODO: implement getProfile later
-// export const getProfile = async (req, res) => {};
+export const getProfile = async (req, res) => {
+  // The request to this routes comes from the protectRoute middleware. If a user has logged in, then according to the middleware, user will be set in the req object and ot will go to the next middleware.
+  try {
+    res.status(200).json({
+      status: "success",
+      user: req.user,
+    });
+  } catch (error) {
+    console.log("Error in authController:getProfile", error.message);
+    res
+      .status(500)
+      .json({
+        status: "failed",
+        message: "Server error",
+        error: error.message,
+      });
+  }
+};
