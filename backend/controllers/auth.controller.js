@@ -88,7 +88,7 @@ export const login = async (req, res) => {
       });
     } else {
       res
-        .status(401)
+        .status(400)
         .json({ status: "failed", message: "Incorrect email or password" });
     }
   } catch (err) {
