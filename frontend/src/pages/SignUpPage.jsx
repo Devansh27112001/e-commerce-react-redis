@@ -5,7 +5,7 @@ import { UserPlus, Lock, User, Mail, ArrowRight, Loader } from "lucide-react";
 import { motion } from "framer-motion";
 
 const SignUpPage = () => {
-  const loading = true;
+  const isLoading = false;
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -56,34 +56,115 @@ const SignUpPage = () => {
                   onChange={(e) =>
                     setFormData({ ...formData, name: e.target.value })
                   }
-                  className="block w-full px-3 py-2 pl-10 bg-gray-700 border border-gray-600 rounded-md shadow-sm placeholder-gray-400 outline-none focus:ring-emerald-500 focus:border-emerald-500"
-                  placeholder="Devansh Kansara"
+                  className="block w-full px-3 py-2 pl-10 bg-gray-700 border border-gray-600 rounded-md shadow-sm placeholder-gray-400 outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm"
+                  placeholder="Mary Williams"
                 />
               </div>
+            </div>
+            <div>
               <label
-                htmlFor="name"
+                htmlFor="email"
                 className="block text-sm font-medium shadow-sm"
               >
-                Email
+                Email address
               </label>
               <div className="mt-1 relative rounded-md shadow-sm">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <User className="h-5 w-5 text-gray-400" aria-hidden="true" />
+                  <Mail className="h-5 w-5 text-gray-400" aria-hidden="true" />
                 </div>
                 <input
-                  id="name"
+                  id="email"
                   type="text"
                   required
                   value={formData.email}
                   onChange={(e) =>
-                    setFormData({ ...formData, name: e.target.value })
+                    setFormData({ ...formData, email: e.target.value })
                   }
                   className="block w-full px-3 py-2 pl-10 bg-gray-700 border border-gray-600 rounded-md shadow-sm placeholder-gray-400 outline-none focus:ring-emerald-500 focus:border-emerald-500"
                   placeholder="name@example.com"
                 />
               </div>
             </div>
+            <div>
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium shadow-sm"
+              >
+                Password
+              </label>
+              <div className="mt-1 relative rounded-md shadow-sm">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <Lock className="h-5 w-5 text-gray-400" aria-hidden="true" />
+                </div>
+                <input
+                  id="password"
+                  type="password"
+                  required
+                  value={formData.password}
+                  onChange={(e) =>
+                    setFormData({ ...formData, password: e.target.value })
+                  }
+                  className="block w-full px-3 py-2 pl-10 bg-gray-700 border border-gray-600 rounded-md shadow-sm placeholder-gray-400 outline-none focus:ring-emerald-500 focus:border-emerald-500"
+                  placeholder="••••••••"
+                />
+              </div>
+            </div>
+            <div>
+              <label
+                htmlFor="confirm-password"
+                className="block text-sm font-medium shadow-sm"
+              >
+                Confirm password
+              </label>
+              <div className="mt-1 relative rounded-md shadow-sm">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <Lock className="h-5 w-5 text-gray-400" aria-hidden="true" />
+                </div>
+                <input
+                  id="confirm-password"
+                  type="password"
+                  required
+                  value={formData.confirmPassword}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      confirmPassword: e.target.value,
+                    })
+                  }
+                  className="block w-full px-3 py-2 pl-10 bg-gray-700 border border-gray-600 rounded-md shadow-sm placeholder-gray-400 outline-none focus:ring-emerald-500 focus:border-emerald-500"
+                  placeholder="••••••••"
+                />
+              </div>
+            </div>
+            <button
+              type="submit"
+              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transition duration-150 ease-in-out disabled:opacity-50"
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <Loader
+                  className="mr-2 w-5 h-5 animate-spin"
+                  aria-hidden="true"
+                >
+                  Loading...
+                </Loader>
+              ) : (
+                <>
+                  <UserPlus className="mr-2 w-5 h-5" aria-hidden="true" />
+                  Sign Up
+                </>
+              )}
+            </button>
           </form>
+          <p className="mt-8 text-center text-sm text-gray-400">
+            Already have an account?{" "}
+            <Link
+              to="/login"
+              className="font-medium text-emerald-600 hover:text-emerald-500 transition duration-150 ease-in-out"
+            >
+              Login here <ArrowRight className="h-4 w-4 inline" />
+            </Link>
+          </p>
         </div>
       </motion.div>
     </div>
