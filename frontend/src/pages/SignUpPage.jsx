@@ -3,18 +3,22 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { UserPlus, Lock, User, Mail, ArrowRight, Loader } from "lucide-react";
 import { motion } from "framer-motion";
+import { useUserStore } from "../stores/useUserStore";
 
 const SignUpPage = () => {
-  const isLoading = false;
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
     confirmPassword: "",
   });
-  const handleSubmit = (e) => {
+
+  const { user, signup, isLoading: isUserLoading } = useUserStore();
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
+    await signup(formData);
+
+    setFormData({ name: "", email: "", password: "", confirmPassword: "" });
   };
   return (
     <div className="flex flex-col justify-center py-12 sm:px-6 lg:px-8">
@@ -139,9 +143,9 @@ const SignUpPage = () => {
             <button
               type="submit"
               className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transition duration-150 ease-in-out disabled:opacity-50"
-              disabled={isLoading}
+              disabled={isUserLoading}
             >
-              {isLoading ? (
+              {isUserLoading ? (
                 <Loader
                   className="mr-2 w-5 h-5 animate-spin"
                   aria-hidden="true"

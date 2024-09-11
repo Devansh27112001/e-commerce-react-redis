@@ -2,15 +2,16 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { LogIn, Mail, Lock, ArrowRight, Loader } from "lucide-react";
+import { useUserStore } from "../stores/useUserStore";
 const LoginPage = () => {
-  const isLoading = false;
   const [credentials, setCredentials] = useState({
     email: "",
     password: "",
   });
-  const handleSubmit = (e) => {
+  const { login, isLoading: isUserLoading } = useUserStore();
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(credentials);
+    await login(credentials);
     setCredentials({ email: "", password: "" });
   };
   return (
@@ -84,9 +85,9 @@ const LoginPage = () => {
             <button
               type="submit"
               className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transition duration-150 ease-in-out disabled:opacity-50"
-              disabled={isLoading}
+              disabled={isUserLoading}
             >
-              {isLoading ? (
+              {isUserLoading ? (
                 <Loader
                   className="mr-2 w-5 h-5 animate-spin"
                   aria-hidden="true"

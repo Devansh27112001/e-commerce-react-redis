@@ -63,7 +63,7 @@ export const signUp = async (req, res) => {
     });
   } catch (err) {
     console.log("Error in authController:signUp", err.message);
-    res.status(500).json({ status: "failed", msg: err.message });
+    res.status(500).json({ status: "failed", message: err.message });
   }
 };
 export const login = async (req, res) => {
@@ -176,7 +176,7 @@ export const refreshToken = async (req, res) => {
 };
 
 export const getProfile = async (req, res) => {
-  // The request to this routes comes from the protectRoute middleware. If a user has logged in, then according to the middleware, user will be set in the req object and ot will go to the next middleware.
+  // The request to this routes comes from the protectRoute middleware. If a user has logged in, then according to the middleware, user will be set in the req object and it will go to the next middleware.
   try {
     res.status(200).json({
       status: "success",
@@ -184,12 +184,10 @@ export const getProfile = async (req, res) => {
     });
   } catch (error) {
     console.log("Error in authController:getProfile", error.message);
-    res
-      .status(500)
-      .json({
-        status: "failed",
-        message: "Server error",
-        error: error.message,
-      });
+    res.status(500).json({
+      status: "failed",
+      message: "Server error",
+      error: error.message,
+    });
   }
 };
