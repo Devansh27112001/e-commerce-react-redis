@@ -7,6 +7,7 @@ import LoadingSpinner from "./components/LoadingSpinner";
 import { Toaster } from "react-hot-toast";
 import { useUserStore } from "./stores/useUserStore";
 import { useEffect } from "react";
+import AdminPage from "./pages/AdminPage";
 
 function App() {
   const { user, isAuthenticated, checkingAuth } = useUserStore();
@@ -34,6 +35,12 @@ function App() {
           <Route
             path="/login"
             element={!user ? <LoginPage /> : <Navigate to="/" />}
+          />
+          <Route
+            path="/admin-dashboard"
+            element={
+              user?.role === "admin" ? <AdminPage /> : <Navigate to="/login" />
+            }
           />
         </Route>
       </Routes>
