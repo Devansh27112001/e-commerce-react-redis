@@ -11,7 +11,11 @@ import analyticsRouter from "./routes/analytic.route.js";
 const app = express();
 // Middlewares
 app.use(morgan("dev"));
-app.use(express.json());
+app.use(
+  express.json({
+    limit: "10mb",
+  })
+);
 app.use(cookieParser()); // for parsing body of the request
 
 // Routes

@@ -7,8 +7,8 @@ import AnalyticsTab from "../components/AnalyticsTab";
 const AdminPage = () => {
   const [activeTab, setActiveTab] = useState(tabs[0].id);
   return (
-    <div className="min-h-screen bg-gray-900 text-white relative overflow-hidden">
-      <div className="relative z-10 container mx-auto px-4 py-16">
+    <div className="min-h-screen text-white relative overflow-hidden">
+      <div className="relative z-10 container mx-auto px-4 py-8">
         <motion.h1
           className="text-4xl font-bold mb-8 text-emerald-400 text-center"
           initial={{ opacity: 0, y: -20 }}
