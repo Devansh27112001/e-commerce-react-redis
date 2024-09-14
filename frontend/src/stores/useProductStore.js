@@ -22,4 +22,50 @@ export const useProductStore = create((set, get) => ({
       set({ loading: false });
     }
   },
+
+  fetchAllProducts: async () => {
+    set({ loading: true });
+    try {
+      const res = await axios.get("/products");
+      set({ products: res.data.products, loading: false });
+    } catch (error) {
+      set({ loading: false });
+      toast.error(error.response.data.message || "Failed to fetch products");
+    }
+  },
+
+  deleteProduct: async (id) => {
+    set({ loading: true });
+    try {
+      const res = await axios.delete(`/products/${id}`);
+      set((previousState) => ({
+        products: previousState.products.filter((product) => {
+          product._id !== id;
+        }),
+        loading: false,
+      }));
+    } catch (error) {
+      set({ loading: false });
+      toast.error(error.response.data.message || "failed to delete product");
+    }
+  },
+
+  toggleFeaturedProduct: async (id) => {
+    set({ loading: true });
+    try {
+      const res = await axios.patch(`/products/${id}`);
+      // This will update the isFeatured property of the product in the store
+      set((previousState) => ({
+        products: previousState.products.map((product) =>
+          product._id === id
+            ? { ...product, isFeatured: res.data.updatedProduct.isFeatured }
+            : product
+        ),
+        loading: false,
+      }));
+    } catch (error) {
+      set({ loading: false });
+      toast.error(error.response.data.message || "An error occurred");
+    }
+  },
 }));

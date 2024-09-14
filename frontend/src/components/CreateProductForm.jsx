@@ -1,11 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { PlusCircle, Upload, Loader } from "lucide-react";
 import { categories } from "../lib/index";
 import { useProductStore } from "../stores/useProductStore";
 
 function CreateProductForm() {
-  const { loading: isLoading, createProduct } = useProductStore();
+  const {
+    loading: isLoading,
+    createProduct,
+    fetchAllProducts,
+  } = useProductStore();
   const [newProduct, setProduct] = useState({
     name: "",
     description: "",
@@ -37,6 +41,7 @@ function CreateProductForm() {
       reader.readAsDataURL(file); // read file as data url: base64 format
     }
   };
+
   return (
     <motion.div
       className="bg-gray-800 shadow-lg rounded-lg p-8 mb-8 max-w-xl mx-auto"

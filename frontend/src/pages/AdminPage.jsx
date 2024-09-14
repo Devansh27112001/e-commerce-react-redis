@@ -1,13 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { tabs } from "../lib/index";
 import CreateProductForm from "../components/CreateProductForm";
 import ProductsList from "../components/ProductsList";
 import AnalyticsTab from "../components/AnalyticsTab";
+import { useProductStore } from "../stores/useProductStore";
 const AdminPage = () => {
   const [activeTab, setActiveTab] = useState(tabs[0].id);
+  const { fetchAllProducts } = useProductStore();
+
+  useEffect(() => {
+    fetchAllProducts();
+  }, []);
   return (
-    <div className="min-h-screen text-white relative overflow-hidden">
+    <div className="min-h-screenrelative overflow-hidden">
       <div className="relative z-10 container mx-auto px-4 py-8">
         <motion.h1
           className="text-4xl font-bold mb-8 text-emerald-400 text-center"
