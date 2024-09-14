@@ -83,6 +83,7 @@ function ProductsList() {
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
                 <button
+                  disabled={isLoading}
                   onClick={() => toggleFeaturedProduct(product._id)}
                   className={`p-1 rounded-full ${
                     product.isFeatured

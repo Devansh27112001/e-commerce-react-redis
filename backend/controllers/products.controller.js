@@ -173,7 +173,7 @@ export const getProductsByCategory = async (req, res) => {
   try {
     const products = await Product.find({ category });
     res.status(200).json({
-      statis: "Success",
+      status: "Success",
       products,
     });
   } catch (error) {
