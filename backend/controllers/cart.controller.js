@@ -2,17 +2,17 @@ import Product from "../models/product.model.js";
 
 export const getCart = async (req, res) => {
   try {
-    // This will give us all the products that are in the cart. But they do not have the quantity.
+    // This will give us all the products that are in the cart. But they do not have the quantity as in the userSchema we have cartItems:[{product: This will contain the id of the added product, quantity: this will quantity of the added product}]
     const products = await Product.find({ _id: { $in: req.user.cartItems } });
 
     const cartItems = products.map((product) => {
-      const item = req.user.find((item) => item.id === product._id);
+      const item = req.user.cartItems.find((item) => item.id === product.id);
       return {
         ...product.toJSON(),
         quantity: item ? item.quantity : 0,
       };
     });
-    res.json(cartItems);
+    res.json({ status: "success", cartItems });
   } catch (error) {
     console.log("Error in cartController:getCart", error.message);
     res.status(500).json({

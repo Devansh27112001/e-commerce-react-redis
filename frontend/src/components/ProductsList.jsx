@@ -10,10 +10,9 @@ function ProductsList() {
     products,
   } = useProductStore();
 
-  console.log(products);
   return (
     <motion.div
-      className="bg-gray-800 shadow-lg rounded-lg max-w-4xl mx-auto overflow-hidden"
+      className="bg-gray-800 shadow-lg rounded-lg max-w-4xl mx-auto"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8 }}
@@ -54,7 +53,7 @@ function ProductsList() {
             </th>
           </tr>
         </thead>
-        <tbody className="bg-gray-800 divide-y divide-gray-700">
+        <tbody className="bg-gray-800 divide-y divide-gray-700 max-h-96 overflow-y-auto">
           {products?.map((product) => (
             <tr key={product._id} className="hover:bg-gray-700">
               <td className="px-6 py-4 whitespace-nowrap">
