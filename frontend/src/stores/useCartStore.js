@@ -65,7 +65,7 @@ const useCartStore = create((set, get) => ({
   },
 
   removeFromCart: async (productId) => {
-    await axios.delete(`/cart`, { data: productId });
+    await axios.delete("/cart", { data: { productId } });
     set((prevState) => {
       return {
         cart: prevState.cart.filter((item) => item._id !== productId),
@@ -74,7 +74,6 @@ const useCartStore = create((set, get) => ({
     get().calculateTotals();
   },
   updateQuantity: async (productId, quantity) => {
-    console.log(productId, quantity);
     if (quantity === 0) {
       get().removeFromCart(productId);
       return;
