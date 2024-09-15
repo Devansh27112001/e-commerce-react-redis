@@ -18,11 +18,11 @@ function App() {
 
   useEffect(() => {
     isAuthenticated();
-  }, []);
+  }, [isAuthenticated]);
 
   useEffect(() => {
     getCartItems();
-  }, []);
+  }, [getCartItems]);
   if (checkingAuth) return <LoadingSpinner />;
 
   return (

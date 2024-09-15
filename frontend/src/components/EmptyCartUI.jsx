@@ -5,7 +5,7 @@ import { ShoppingCart } from "lucide-react";
 const EmptyCartUI = () => {
   return (
     <motion.div
-      className="flex flex-col items-center justify-center space-y-3 py-16 w-full"
+      className="flex flex-col items-center justify-center space-y-3 py-16"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}

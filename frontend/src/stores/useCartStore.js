@@ -11,12 +11,14 @@ const useCartStore = create((set, get) => ({
 
   getCartItems: async () => {
     try {
+      set({ loading: true });
       // When we get the cartItems, we are already logged in and so we have user stored our request.
       const res = await axios.get("/cart");
       set({ cart: res.data.cartItems });
       get().calculateTotals();
+      set({ loading: false });
     } catch (error) {
-      set({ cart: [] });
+      set({ cart: [], loading: false });
     }
   },
 
@@ -60,6 +62,31 @@ const useCartStore = create((set, get) => ({
     }
 
     set({ totalAmount: total, subTotal });
+  },
+
+  removeFromCart: async (productId) => {
+    await axios.delete(`/cart`, { data: productId });
+    set((prevState) => {
+      return {
+        cart: prevState.cart.filter((item) => item._id !== productId),
+      };
+    });
+    get().calculateTotals();
+  },
+  updateQuantity: async (productId, quantity) => {
+    console.log(productId, quantity);
+    if (quantity === 0) {
+      get().removeFromCart(productId);
+      return;
+    }
+
+    await axios.put(`/cart/${productId}`, { quantity });
+    set((prevState) => ({
+      cart: prevState.cart.map((item) =>
+        item._id === productId ? { ...item, quantity } : item
+      ),
+    }));
+    get().calculateTotals();
   },
 }));
 
