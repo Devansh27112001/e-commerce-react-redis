@@ -4,6 +4,8 @@ import EmptyCartUI from "../components/EmptyCartUI";
 import { motion } from "framer-motion";
 import CartItem from "../components/CartItem";
 import RecommendProducts from "../components/RecommendProducts";
+import OrderSummary from "../components/OrderSummary";
+import CouponCard from "../components/CouponCard";
 
 const CartPage = () => {
   const { cart } = useCartStore();
@@ -28,6 +30,18 @@ const CartPage = () => {
             )}
             {cart?.length > 0 && <RecommendProducts />}
           </motion.div>
+          {cart.length > 0 && (
+            <motion.div
+              className="mx-auto mt-6 max-w-4xl flex-1 space-y-6 lg:mt-0 lg:w-full
+            "
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+            >
+              <OrderSummary />
+              <CouponCard />
+            </motion.div>
+          )}
         </div>
       </div>
     </div>

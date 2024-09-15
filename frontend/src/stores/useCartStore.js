@@ -5,6 +5,7 @@ import { toast } from "react-hot-toast";
 const useCartStore = create((set, get) => ({
   cart: [],
   coupon: null,
+  isCouponApplied: false,
   totalAmount: 0,
   subTotal: 0,
   loading: false,

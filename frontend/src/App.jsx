@@ -10,19 +10,14 @@ import { useEffect } from "react";
 import AdminPage from "./pages/AdminPage";
 import CategoryPage from "./pages/CategoryPage";
 import CartPage from "./pages/CartPage";
-import useCartStore from "./stores/useCartStore";
 
 function App() {
   const { user, isAuthenticated, checkingAuth } = useUserStore();
-  const { getCartItems } = useCartStore();
 
   useEffect(() => {
     isAuthenticated();
   }, [isAuthenticated]);
 
-  useEffect(() => {
-    getCartItems();
-  }, [getCartItems]);
   if (checkingAuth) return <LoadingSpinner />;
 
   return (
