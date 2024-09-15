@@ -9,12 +9,19 @@ import { useUserStore } from "./stores/useUserStore";
 import { useEffect } from "react";
 import AdminPage from "./pages/AdminPage";
 import CategoryPage from "./pages/CategoryPage";
+import CartPage from "./pages/CartPage";
+import useCartStore from "./stores/useCartStore";
 
 function App() {
   const { user, isAuthenticated, checkingAuth } = useUserStore();
+  const { getCartItems } = useCartStore();
 
   useEffect(() => {
     isAuthenticated();
+  }, []);
+
+  useEffect(() => {
+    getCartItems();
   }, []);
   if (checkingAuth) return <LoadingSpinner />;
 
@@ -44,6 +51,10 @@ function App() {
             }
           />
           <Route path="/category/:category" element={<CategoryPage />} />
+          <Route
+            path="/cart"
+            element={user ? <CartPage /> : <Navigate to="/login" />}
+          />
         </Route>
       </Routes>
       <Toaster />

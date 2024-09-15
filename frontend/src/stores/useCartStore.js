@@ -11,12 +11,12 @@ const useCartStore = create((set, get) => ({
 
   getCartItems: async () => {
     try {
+      // When we get the cartItems, we are already logged in and so we have user stored our request.
       const res = await axios.get("/cart");
       set({ cart: res.data.cartItems });
       get().calculateTotals();
     } catch (error) {
       set({ cart: [] });
-      toast.error(error.response.data.message || "An error occured");
     }
   },
 
