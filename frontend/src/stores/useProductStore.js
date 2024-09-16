@@ -1,10 +1,12 @@
 import { create } from "zustand";
 import axios from "../lib/axios";
 import { toast } from "react-hot-toast";
+import RecommendProducts from "../components/RecommendProducts";
 
 export const useProductStore = create((set, get) => ({
   products: [],
   loading: false,
+  recommendProducts: [],
 
   setProducts: (products) => set({ products }),
 
@@ -80,6 +82,20 @@ export const useProductStore = create((set, get) => ({
     } catch (error) {
       set({ loading: false });
       toast.error(error.response.data.message || "An error occurred");
+    }
+  },
+
+  fetchRecommededProducts: async () => {
+    set({ loading: true });
+    try {
+      const res = await axios.get("/products/recommendations");
+      set({ recommendProducts: res.data.products, loading: false });
+    } catch (error) {
+      set({ loading: false });
+      toast.error(
+        error.response.data.message ||
+          "Failed to fetch the products. Please try again!"
+      );
     }
   },
 }));
