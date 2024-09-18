@@ -4,7 +4,7 @@ import { Outlet } from "react-router-dom";
 
 const AppLayout = () => {
   return (
-    <div className="relative z-50 pt-20">
+    <div className="relative z-50 pt-2">
       <NavBar />
       <Outlet />
     </div>

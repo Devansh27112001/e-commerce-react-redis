@@ -12,6 +12,7 @@ import CategoryPage from "./pages/CategoryPage";
 import CartPage from "./pages/CartPage";
 import PurchaseSuccess from "./pages/PurchaseSuccess";
 import useCartStore from "./stores/useCartStore";
+import PurchaseCancel from "./pages/PurchaseCancel";
 
 function App() {
   const { user, isAuthenticated, checkingAuth } = useUserStore();
@@ -61,6 +62,10 @@ function App() {
           <Route
             path="/purchase-success"
             element={user ? <PurchaseSuccess /> : <Navigate to="/login" />}
+          />
+          <Route
+            path="/purchase-cancel"
+            element={user ? <PurchaseCancel /> : <Navigate to="/login" />}
           />
         </Route>
       </Routes>
