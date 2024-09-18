@@ -5,6 +5,7 @@ import { stripe } from "../lib/stripe.js";
 export const createCheckoutSession = async (req, res) => {
   try {
     const { products, couponCode } = req.body;
+    console.log(products);
 
     // Check whether there are products is a valid array
     if (!Array.isArray(products) || products.length === 0) {
@@ -58,11 +59,11 @@ export const createCheckoutSession = async (req, res) => {
         userId: req.user._id.toString(),
         couponCode: couponCode || "",
         products: JSON.stringify(
-          products.map((product) => {
-            id: product._id;
-            quantity: product.quantity;
-            price: product.price;
-          })
+          products.map((product) => ({
+            id: product._id,
+            quantity: product.quantity,
+            price: product.price,
+          }))
         ),
       },
     });
@@ -112,7 +113,7 @@ export const checkoutSuccess = async (req, res) => {
       const newOrder = await Order({
         user: session.metadata.userId,
         products: products.map((product) => ({
-          product: product._id,
+          product: product.id,
           quantity: product.quantity,
           price: product.price,
         })),
@@ -130,7 +131,7 @@ export const checkoutSuccess = async (req, res) => {
       });
     }
   } catch (error) {
-    console, log("Error processing successful checkout", error.message);
+    console.log("Error processing successful checkout", error.message);
     res.status(500).json({
       status: "failed",
       message: "Error processing successful checkout",

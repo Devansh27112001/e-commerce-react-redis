@@ -74,6 +74,7 @@ const useCartStore = create((set, get) => ({
     });
     get().calculateTotals();
   },
+
   updateQuantity: async (productId, quantity) => {
     if (quantity === 0) {
       get().removeFromCart(productId);
@@ -87,6 +88,28 @@ const useCartStore = create((set, get) => ({
       ),
     }));
     get().calculateTotals();
+  },
+
+  clearCart: async () => {
+    await axios.delete("/cart");
+    set({ cart: [] });
+    get().calculateTotals();
+  },
+
+  paymentWithStripe: async (stripePromise) => {
+    try {
+      const stripe = await stripePromise;
+      const res = await axios.post("/payments/create-checkout-session", {
+        products: get().cart,
+        couponCode: get().coupon ? get().coupon.code : null,
+      });
+      const session = res.data;
+      const result = await stripe.redirectToCheckout({
+        sessionId: session.id,
+      });
+    } catch (error) {
+      console.log(error);
+    }
   },
 }));
 
