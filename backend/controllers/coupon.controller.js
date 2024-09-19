@@ -1,12 +1,13 @@
 import Coupon from "../models/coupon.model.js";
 
 export const getCoupon = async (req, res) => {
+  // This is a handler fro a protected route. So, this will be called only of the user has looged in successfully.If the user has logged and the the route /api/coupons is called, then this will be called after it goes through the protectedRoute wherein the user's access token is verified and then the user is put in the req.user. This user is used here to get the user's coupon.
   try {
     const coupon = await Coupon.findOne({
       userId: req.user._id,
       isActive: true,
     });
-    res.status(200).json(coupon || null);
+    res.status(200).json({ coupon } || null);
   } catch (error) {
     console.log("Error in couponController:getCoupon", error.message);
     res.status(500).json({
@@ -17,7 +18,7 @@ export const getCoupon = async (req, res) => {
   }
 };
 
-export const valodateCoupon = async (req, res) => {
+export const validateCoupon = async (req, res) => {
   try {
     const { code } = req.body;
     const coupon = await Coupon.findOne({

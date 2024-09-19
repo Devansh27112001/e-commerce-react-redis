@@ -10,6 +10,15 @@ const useCartStore = create((set, get) => ({
   subTotal: 0,
   loading: false,
 
+  getCoupon: async () => {
+    try {
+      const res = await axios.get("/coupons");
+      set({ coupon: res.data.coupon });
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
   getCartItems: async () => {
     try {
       set({ loading: true });

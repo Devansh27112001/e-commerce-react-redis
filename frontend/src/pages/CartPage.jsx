@@ -8,7 +8,10 @@ import OrderSummary from "../components/OrderSummary";
 import CouponCard from "../components/CouponCard";
 
 const CartPage = () => {
-  const { cart } = useCartStore();
+  const { cart, getCoupon } = useCartStore();
+  useEffect(() => {
+    getCoupon();
+  }, []);
   return (
     <div className="py-8 md:py-16">
       <div className="max-w-screen-xl px-4 2xl:px-0 mx-auto">
