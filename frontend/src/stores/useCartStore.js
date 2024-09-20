@@ -19,6 +19,23 @@ const useCartStore = create((set, get) => ({
     }
   },
 
+  applyCoupon: async (code) => {
+    try {
+      const res = await axios.post(`/coupons/validate`, { code });
+      set({ coupon: res.data, isCouponApplied: true });
+      get().calculateTotals();
+      toast.success("Coupon applied successfully");
+    } catch (error) {
+      console.log(error.response?.data?.message || "Failed to apply coupon");
+    }
+  },
+
+  removeCoupon: () => {
+    set({ isCouponApplied: false });
+    get().calculateTotals();
+    toast.success("Coupon removed successfully");
+  },
+
   getCartItems: async () => {
     try {
       set({ loading: true });
@@ -60,14 +77,14 @@ const useCartStore = create((set, get) => ({
   },
 
   calculateTotals: () => {
-    const { cart, coupon } = get();
+    const { cart, coupon, isCouponApplied } = get();
     const subTotal = cart.reduce(
       (total, item) => total + item.price * item.quantity,
       0
     );
 
     let total = subTotal;
-    if (coupon) {
+    if (coupon && isCouponApplied) {
       total = subTotal - (subTotal * coupon.discountPercentage) / 100;
     }
 

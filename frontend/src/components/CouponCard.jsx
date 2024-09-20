@@ -1,18 +1,30 @@
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useCartStore from "../stores/useCartStore";
+import { set } from "mongoose";
 
 const CouponCard = () => {
+  const { coupon, isCouponApplied, getCoupon, applyCoupon, removeCoupon } =
+    useCartStore();
   const [couponCode, setCouponCode] = useState("");
 
-  const { coupon, isCouponApplied } = useCartStore();
+  useEffect(() => {
+    getCoupon();
+  }, [getCoupon]);
+
+  useEffect(() => {
+    if (coupon) {
+      setCouponCode(coupon.code);
+    }
+  }, [coupon]);
 
   const handleApplyCouponCode = () => {
-    console.log(couponCode);
+    if (!couponCode) return;
+    applyCoupon(couponCode);
   };
 
   const handleRemoveCouponCode = () => {
-    console.log("Remove coupon code");
+    removeCoupon();
   };
   return (
     <motion.div
@@ -52,7 +64,7 @@ const CouponCard = () => {
       </div>
       {coupon && isCouponApplied && (
         <div className="mt-4">
-          <h3 className="text-lg font-medium text-gray-300">Applid Coupon</h3>
+          <h3 className="text-lg font-medium text-gray-300">Applied Coupon</h3>
           <p>
             {coupon.code} - {coupon.discountPercentage}% off
           </p>
