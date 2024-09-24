@@ -9,6 +9,7 @@ const router = express.Router();
 
 router.get("/", protectRoute, adminRoute, async (req, res) => {
   try {
+    // Gettong the analytics data
     const analyticsData = await getAnalyticsData();
     // The bew Date will look something like '2024-09-06T21:05:39.551Z'
     const endDate = new Date();
@@ -16,6 +17,7 @@ router.get("/", protectRoute, adminRoute, async (req, res) => {
     // The .getTime() will convert the date into milliseconds and we subtract 7 days from it and create a Date out of it.
     const startDate = new Date(endDate.getTime() - 7 * 24 * 60 * 60 * 1000);
 
+    // Getting the daily sales data
     const dailySalesdata = await getDailySalesData(startDate, endDate);
     res.status(200).json({
       status: "success",
