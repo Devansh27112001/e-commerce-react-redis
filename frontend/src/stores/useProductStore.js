@@ -98,4 +98,15 @@ export const useProductStore = create((set, get) => ({
       );
     }
   },
+
+  fetchFeaturedProducts: async () => {
+    set({ loading: true });
+    try {
+      const res = await axios.get("/products/featured");
+      set({ products: res.data.featuredProducts, loading: false });
+    } catch (error) {
+      console.log(error);
+      set({ loading: false });
+    }
+  },
 }));

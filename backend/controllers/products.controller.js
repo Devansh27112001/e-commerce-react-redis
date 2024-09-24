@@ -33,7 +33,7 @@ export const getAllProducts = async (req, res) => {
 export const getFeaturedProducts = async (req, res) => {
   try {
     let featuredProducts = await redis.get("featuredProducts");
-    // Redis will store the featuredProducts in string format. So we nedd to parse it in order to get an actual object.
+    // Redis will store the featuredProducts in string format. So we need to parse it in order to get an actual object.
     if (featuredProducts) {
       return res.status(200).json({
         status: "Success",
