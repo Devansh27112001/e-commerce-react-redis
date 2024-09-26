@@ -72,7 +72,12 @@ const useCartStore = create((set, get) => ({
       });
       get().calculateTotals();
     } catch (error) {
-      toast.error(error.response.data.message || "An error occured");
+      console.log(error);
+      error?.response?.status === 401
+        ? toast.error("Please login in order to add to cart")
+        : toast.error(
+            error?.response?.data?.message || "Failed to add to cart"
+          );
     }
   },
 
