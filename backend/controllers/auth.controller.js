@@ -126,7 +126,7 @@ export const logout = async (req, res) => {
   }
 };
 
-// The accessToken is valid for 15 minutes. If it expires, the user will provide the refreshToken to get a new accessToken
+// The accessToken is valid for 15 minutes. If it expires, the user will provide the refreshToken to get a new accessToken. This refresh token is also sen in the cookies as a response to the user when there is a signUp in the frontend or a user logs in.
 export const refreshToken = async (req, res) => {
   try {
     // Get the refreshtoken from the cookie
